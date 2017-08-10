@@ -1,0 +1,12 @@
+:backends:
+  - yaml
+
+:yaml:
+  :datadir: "hiera"
+
+:hierarchy:
+  # globals / environment
+  - "environment/%{environment}"
+
+  # globals
+  - "common"

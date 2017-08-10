@@ -47,6 +47,6 @@ module ErbHiera
   end
 
   def self.manifests(dir)
-    Dir.glob(File.join(dir, "**", "*.yaml"))
+    Dir.glob(File.join(dir, "**", "*"))
   end
 end

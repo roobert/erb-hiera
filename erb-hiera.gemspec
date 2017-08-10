@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
 
   spec.license                    = "MIT"
 
-  spec.files                      = Dir["lib/**/*.rb", "assets/**/*", "bin/erb-hiera", "*.md"]
+  spec.files                      = Dir["lib/**/*.rb", "bin/erb-hiera", "*.md", "example/**/*"]
   spec.executables                = ["erb-hiera"]
   spec.require_paths              = ["lib"]
 

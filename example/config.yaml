@@ -1,0 +1,10 @@
+- scope:
+    environment: dev
+  in_dir: templates
+  out_dir: output/dev
+
+- scope:
+    environment: stage
+  in_dir: templates
+  out_dir: output/stage
+

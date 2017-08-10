@@ -1,0 +1,2 @@
+common variable: <%= hiera("common") %>
+environment variable: <%= hiera("environment::description") %>
