@@ -19,7 +19,7 @@ module ErbHiera
     @options = CLI.parse
 
     mappings.each do |config|
-      ErbHiera.scope = config["scope"]
+      ErbHiera.scope  = config["scope"]
       in_dir          = config["in_dir"]
       out_dir         = config["out_dir"]
 
