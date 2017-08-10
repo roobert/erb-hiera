@@ -1,2 +1,2 @@
-Global: some global variable
-Environment Description: this is the staging environment
+common variable: some common variable
+environment variable: this is the staging environment
