@@ -3,9 +3,7 @@ require "hiera"
 module ErbHiera
   module Hiera
     def self.hiera(key)
-      config = File.join(Directory.root, "hiera.yaml")
-
-      hiera = ::Hiera.new(:config => config)
+      hiera = ::Hiera.new(:config => options[:hiera_config])
       ::Hiera.logger = "noop"
       value = hiera.lookup(key, nil, ErbHiera.scope, nil, :priority)
 

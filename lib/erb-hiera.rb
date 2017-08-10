@@ -43,7 +43,7 @@ module ErbHiera
   private
 
   def self.mappings
-    YAML.load_file(File.join(Directory.root, "map.yaml"))
+    YAML.load_file(options[:config])
   end
 
   def self.manifests(dir)
