@@ -20,11 +20,15 @@ module ErbHiera
 
     mappings.each do |config|
       ErbHiera.scope  = config["scope"]
-      in_dir          = config["in_dir"]
-      out_dir         = config["out_dir"]
+      in_dir          = config["dir"]["input"]
+      out_dir         = config["dir"]["output"]
+
+      [in_dir, out_dir].each do |dir|
+        raise StandardError, "error: undefined #{dir.split('_')[0]} dir" unless dir
+      end
 
       manifests(in_dir).each do |manifest|
-        out_file = File.join(out_dir ,manifest.gsub(in_dir, ""))
+        out_file = File.join(out_dir, manifest.gsub(in_dir, ""))
 
         Manifest.info(manifest, out_file) if options[:verbose]
 
