@@ -23,8 +23,8 @@ module ErbHiera
       in_dir          = config["dir"]["input"]
       out_dir         = config["dir"]["output"]
 
-      [in_dir, out_dir].each do |dir|
-        raise StandardError, "error: undefined #{dir.split('_')[0]} dir" unless dir
+      [:in_dir, :out_dir].each do |dir|
+        raise StandardError, "error: undefined #{dir.to_s.split('_')[0]}put directory" unless binding.local_variable_get(dir)
       end
 
       manifests(in_dir).each do |manifest|
@@ -42,9 +42,22 @@ module ErbHiera
         end
       end
     end
+  rescue => error
+    handle_error(error)
+    exit 1
   end
 
   private
+
+  def self.handle_error(error)
+    if options[:debug]
+      puts
+      puts error.backtrace
+    end
+
+    puts
+    puts error
+  end
 
   def self.mappings
     YAML.load_file(options[:config])
