@@ -64,6 +64,6 @@ module ErbHiera
   end
 
   def self.manifests(dir)
-    Dir.glob(File.join(dir, "**", "*"))
+    Dir.glob(File.join(dir, "**", "*")).reject { |file| File.directory? file }
   end
 end
