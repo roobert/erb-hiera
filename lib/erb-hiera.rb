@@ -18,10 +18,10 @@ module ErbHiera
   def self.run
     @options = CLI.parse
 
-    mappings.each do |config|
-      ErbHiera.scope  = config["scope"]
-      in_dir          = config["dir"]["input"]
-      out_dir         = config["dir"]["output"]
+    mappings.each do |mapping|
+      ErbHiera.scope  = mapping["scope"]
+      in_dir          = mapping["dir"]["input"]
+      out_dir         = mapping["dir"]["output"]
 
       [:in_dir, :out_dir].each do |dir|
         raise StandardError, "error: undefined #{dir.to_s.split('_')[0]}put directory" unless binding.local_variable_get(dir)
