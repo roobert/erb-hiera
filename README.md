@@ -17,9 +17,11 @@ $ ./bin/erb-hiera --help
 Options:
   --config=<s>          specify config file
   --hiera-config=<s>    specify hiera config file
-  --dry-run             don't write out files
-  --verbose             print compiled template(s)
+  --template=<s>        specify a single template instead of a config
+  --environment=<s>     specify the environment
+  --verbose             print compiled templates
   --debug               print backtrace on error
+  --dry-run             don't write out files
 ```
 
 ## Example
@@ -27,6 +29,9 @@ Options:
 ```
 cd example
 erb-hiera --config config.yaml --hiera-config hiera.yaml --verbose
+
+# render a specific template using injected erb scope (outputs only to stdout)
+erb-hiera --template=templates/template.txt --hiera-config=hiera.yaml environment=dev another=value
 ```
 
 ## References

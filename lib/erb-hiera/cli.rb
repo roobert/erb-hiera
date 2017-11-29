@@ -6,6 +6,8 @@ module ErbHiera
       option_parser = Trollop::Parser.new do
         opt :config,       "specify config file", :type => :string
         opt :hiera_config, "specify hiera config file", :type => :string
+        opt :template,     "specify a single template instead of a config", :type => :string
+        opt :environment,  "specify the environment", :type => :string
         opt :verbose,      "print compiled templates"
         opt :debug,        "print backtrace on error"
         opt :dry_run,      "don't write out files"
@@ -19,8 +21,13 @@ module ErbHiera
       end
 
       # validate cli args
-      raise ArgumentError, "config file not specified" unless options[:config_given]
-      raise ArgumentError, "config file not readable"  unless File.readable?(options[:config])
+      if (options[:config] && options[:template]) || ( ! options[:config] && ! options[:template])
+        raise ArgumentError, "either config or template must be defined but not both"
+      end
+
+      if options[:config_given]
+        raise ArgumentError, "config file not readable"  unless File.readable?(options[:config])
+      end
 
       raise ArgumentError, "hiera config file not specified" unless options[:hiera_config_given]
       raise ArgumentError, "hiera config file not readable"  unless File.readable?(options[:hiera_config])
