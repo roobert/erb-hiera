@@ -17,7 +17,6 @@ module ErbHiera
 
   def self.run
     @options = CLI.parse
-
     mappings.each do |mapping|
       ErbHiera.scope  = mapping["scope"]
       in_dir          = mapping["dir"]["input"]
@@ -31,14 +30,18 @@ module ErbHiera
         out_file = File.join(out_dir, manifest.gsub(in_dir, ""))
 
         Manifest.info(manifest, out_file) if options[:verbose]
-
+        manifest = options[:template] if options[:template]
         erb = ERB.new(File.read(manifest), nil, "-").result(Hiera.get_binding)
 
         puts erb if options[:verbose]
 
         unless options[:dry_run]
-          FileUtils.mkdir_p File.dirname(out_file) unless Dir.exists?(File.dirname(out_file))
-          File.write(out_file, erb)
+          if out_dir == '::stdout'
+            puts erb
+          else
+            FileUtils.mkdir_p File.dirname(out_file) unless Dir.exists?(File.dirname(out_file))
+            File.write(out_file, erb)
+          end
         end
       end
     end
@@ -60,10 +63,30 @@ module ErbHiera
   end
 
   def self.mappings
-    YAML.load_file(options[:config])
+    if options[:template]
+      # collect argv and split on = into a hash for scope
+      scope = {}
+      ARGV.each do |kv|
+        k, v = kv.split('=')
+        scope[k] = v
+      end
+      # senable defaults
+      config = [{
+        "scope" => scope,
+        "dir" => {
+          "input"  => "::template",
+          "output" => "::stdout"
+        }
+      }]
+    else
+      config = YAML.load_file(options[:config])
+    end
+
+    config
   end
 
   def self.manifests(dir)
+    return [dir] if dir == '::template' # dump out if we are defaulting
     Dir.glob(File.join(dir, "**", "*")).reject { |file| File.directory? file }
   end
 end
