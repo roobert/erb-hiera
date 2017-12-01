@@ -31,8 +31,9 @@ module ErbHiera
         out_file = File.join(out_dir, manifest.gsub(in_dir, ""))
 
         Manifest.info(manifest, out_file) if options[:verbose]
-
-        erb = ERB.new(File.read(manifest), nil, "-").result(Hiera.get_binding)
+        bind=Hiera.get_binding
+        bind.local_variable_set(:scope, mapping["scope"])
+        erb = ERB.new(File.read(manifest), nil, "-").result(bind)
 
         puts erb if options[:verbose]
 
