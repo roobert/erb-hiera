@@ -20,26 +20,23 @@ module ErbHiera
 
     mappings.each do |mapping|
       ErbHiera.scope  = mapping["scope"]
-      in_dir          = mapping["dir"]["input"]
-      out_dir         = mapping["dir"]["output"]
+      input           = mapping["dir"]["input"]
+      output          = mapping["dir"]["output"]
 
-      [:in_dir, :out_dir].each do |dir|
-        raise StandardError, "error: undefined #{dir.to_s.split('_')[0]}put directory" unless binding.local_variable_get(dir)
+      [:input, :output].each do |location|
+        raise StandardError, "error: undefined #{dir.to_s.split('_')[0]}put" unless binding.local_variable_get(location)
       end
 
-      manifests(in_dir).each do |manifest|
-        out_file = File.join(out_dir, manifest.gsub(in_dir, ""))
+      # if input is a file then out_file is a file too
+      if input =~ /.erb$/
+        generate(output, input)
+        next
+      end
 
-        Manifest.info(manifest, out_file) if options[:verbose]
-
-        erb = ERB.new(File.read(manifest), nil, "-").result(Hiera.get_binding)
-
-        puts erb if options[:verbose]
-
-        unless options[:dry_run]
-          FileUtils.mkdir_p File.dirname(out_file) unless Dir.exists?(File.dirname(out_file))
-          File.write(out_file, erb)
-        end
+      # otherwise the input/output are directories and all files should be processed..
+      manifests(input).each do |manifest|
+        out_file = File.join(output, manifest.gsub(input, ""))
+        generate(out_file, manifest)
       end
     end
   rescue => error
@@ -48,6 +45,19 @@ module ErbHiera
   end
 
   private
+
+  def self.generate(out_file, manifest)
+    Manifest.info(manifest, out_file) if options[:verbose]
+
+    erb = ERB.new(File.read(manifest), nil, "-").result(Hiera.get_binding)
+
+    puts erb if options[:verbose]
+
+    unless options[:dry_run]
+      FileUtils.mkdir_p File.dirname(out_file) unless Dir.exists?(File.dirname(out_file))
+      File.write(out_file, erb)
+    end
+  end
 
   def self.handle_error(error)
     if options[:debug]

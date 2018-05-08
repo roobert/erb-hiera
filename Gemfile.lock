@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    erb-hiera (0.1.0)
+    erb-hiera (0.4.3)
       hiera
       trollop
 
@@ -75,4 +75,4 @@ DEPENDENCIES
   rspec
 
 BUNDLED WITH
-   1.15.3
+   1.15.4
