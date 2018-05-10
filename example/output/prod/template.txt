@@ -1,0 +1,2 @@
+common variable: some common variable
+environment variable: this is the prod environment

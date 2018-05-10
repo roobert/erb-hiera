@@ -2,6 +2,7 @@
 
 require "erb"
 require "yaml"
+require "json"
 require "fileutils"
 
 require "erb-hiera/version"
@@ -17,18 +18,21 @@ module ErbHiera
 
   def self.run
     @options = CLI.parse
-
     mappings.each do |mapping|
-      ErbHiera.scope  = mapping["scope"]
-      input           = mapping["dir"]["input"]
-      output          = mapping["dir"]["output"]
+      ErbHiera.scope  = scope_from_cli   || mapping["scope"]
+      input           = options[:input]  || mapping["dir"]["input"]
+      output          = options[:output] || mapping["dir"]["output"]
 
       [:input, :output].each do |location|
-        raise StandardError, "error: undefined #{dir.to_s.split('_')[0]}put" unless binding.local_variable_get(location)
+        unless binding.local_variable_get(location)
+          raise StandardError, "error: undefined #{dir.to_s.split('_')[0]}put"
+        end
       end
 
-      # if input is a file then out_file is a file too
-      if input =~ /.erb$/
+      output = STDOUT if output == "-"
+
+      # if input is a file/stdin then out_file should be a file/stdout
+      if input =~ /.erb$/ || input == STDIN
         generate(output, input)
         next
       end
@@ -41,22 +45,29 @@ module ErbHiera
     end
   rescue => error
     handle_error(error)
-    exit 1
   end
 
   private
 
+  def self.scope_from_cli
+    JSON.load(options[:scope]) if options[:scope]
+  end
+
   def self.generate(out_file, manifest)
     Manifest.info(manifest, out_file) if options[:verbose]
-
     erb = ERB.new(File.read(manifest), nil, "-").result(Hiera.get_binding)
 
     puts erb if options[:verbose]
 
-    unless options[:dry_run]
-      FileUtils.mkdir_p File.dirname(out_file) unless Dir.exists?(File.dirname(out_file))
-      File.write(out_file, erb)
+    return if options[:dry_run]
+
+    if out_file == STDOUT
+      puts erb
+      return
     end
+
+    FileUtils.mkdir_p File.dirname(out_file) unless Dir.exists?(File.dirname(out_file))
+    File.write(out_file, erb)
   end
 
   def self.handle_error(error)
@@ -67,10 +78,11 @@ module ErbHiera
 
     puts
     puts error
+    exit 1
   end
 
   def self.mappings
-    YAML.load_file(options[:config])
+    YAML.load_file(ErbHiera.options[:mapping_config])
   end
 
   def self.manifests(dir)
