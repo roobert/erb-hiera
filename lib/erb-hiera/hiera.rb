@@ -5,8 +5,11 @@ module ErbHiera
     def self.erb_hiera
       @hiera ||= begin
         hiera = ::Hiera.new(:config => ErbHiera.options[:hiera_config])
+
+        # injecting the Hash backend ensures that the --variables flag will always be read
         hiera.config[:backends].insert(0, "hash") unless hiera.config[:backends][0] == "hash"
-        ::Hiera.logger = logger_type
+
+        ::Hiera.logger = ErbHiera.options[:debug_given] ? "console" : "noop"
 
         if ErbHiera.options[:debug_given]
           puts "# hiera config"
@@ -20,7 +23,7 @@ module ErbHiera
     def self.dump_config
     end
 
-    def self.hiera(key)
+    def self.hiera(key, type: :priority)
       value = erb_hiera.lookup(key, nil, ErbHiera.scope, nil, :priority)
 
       unless value
@@ -33,34 +36,16 @@ module ErbHiera
     end
 
     def self.hiera_array(key)
-      value = erb_hiera.lookup(key, nil, ErbHiera.scope, nil, :array)
-
-      unless value
-        puts "\nerror: cannot find value for key: #{key}"
-        exit 1
-      end
-
-      puts "# #{key}: #{value}" if ErbHiera.options[:verbose]
-      value
+      hiera(key, type: :array)
     end
 
     def self.hiera_hash(key)
-      value = erb_hiera.lookup(key, nil, ErbHiera.scope, nil, :hash)
-
-      unless value
-        puts "\nerror: cannot find value for key: #{key}"
-        exit 1
-      end
-
-      puts "# #{key}: #{value}" if ErbHiera.options[:verbose]
-      value
+      hiera(key, type: :hash)
     end
 
     private
 
     def self.logger_type
-      return "console" if ErbHiera.options[:debug_given]
-      "noop"
     end
 
     # bind calls from template to context of this module
