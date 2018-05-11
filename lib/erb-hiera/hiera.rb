@@ -20,9 +20,6 @@ module ErbHiera
       end
     end
 
-    def self.dump_config
-    end
-
     def self.hiera(key, type: :priority)
       value = erb_hiera.lookup(key, nil, ErbHiera.scope, nil, type)
 
@@ -44,9 +41,6 @@ module ErbHiera
     end
 
     private
-
-    def self.logger_type
-    end
 
     # bind calls from template to context of this module
     def self.get_binding
