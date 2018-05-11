@@ -21,15 +21,14 @@ Options:
   -i, --input=<s>             override input config options
   -o, --output=<s>            override output config options
                                
-  -s, --scope=<s>             specify the scope
-  -e, --environment=<s>       specify the environment
+  -s, --scope=<s>             override the lookup scope
+  -v, --variables=<s>         override facts
                                
-  -d, --dry-run               don't write out files
+  --dry-run                   don't write out files
                                
-  -v, --verbose               print compiled templates
-  -b, --debug                 print backtrace on error
+  --verbose                   print compiled templates
+  --debug                     print backtrace on error
                                
-  -h, --help                  Show this message
 ```
 
 ## Example

@@ -9,8 +9,9 @@ module ErbHiera
 
         opt :input,          "override input config options",     :type => :string, :short => :i
         opt :output,         "override output config options\n ", :type => :string, :short => :o
-        opt :scope,          "specify the scope",                 :type => :string, :short => :s
-        opt :environment,    "specify the environment\n ",        :type => :string, :short => :e
+
+        opt :scope,          "override the lookup scope",         :type => :string, :short => :s
+        opt :variables,      "override facts\n ",                 :type => :string, :short => :v
 
         opt :dry_run,        "don't write out files\n "
 

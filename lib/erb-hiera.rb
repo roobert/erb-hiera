@@ -11,6 +11,8 @@ require "erb-hiera/directory"
 require "erb-hiera/hiera"
 require "erb-hiera/manifest"
 
+require "hiera/backend/hash_backend"
+
 module ErbHiera
   class << self
     attr_accessor :options, :scope
