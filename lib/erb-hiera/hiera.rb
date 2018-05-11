@@ -6,7 +6,7 @@ module ErbHiera
       @hiera ||= begin
         hiera = ::Hiera.new(:config => ErbHiera.options[:hiera_config])
 
-        # injecting the Hash backend ensures that the --variables flag will always be read
+        # injecting the Hash backend ensures that the --variables flag will always work as expected
         hiera.config[:backends].insert(0, "hash") unless hiera.config[:backends][0] == "hash"
 
         ::Hiera.logger = ErbHiera.options[:debug_given] ? "console" : "noop"
