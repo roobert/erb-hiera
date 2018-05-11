@@ -38,7 +38,10 @@ cd example
 erb-hiera --mapping-config mapping.yaml --hiera-config hiera.yaml --verbose
 
 # render a specific template using injected erb scope (outputs only to stdout)
-erb-hiera --input templates/template.txt --hiera-config hiera.yaml --scope '{ "environment": "prod" }' -o -
+erb-hiera --mapping-config mapping.yaml --hiera-config hiera.yaml --scope '{ "environment": "prod" }' -o -
+
+# use normal lookup path but override a fact at the top level
+erb-hiera --mapping-config mapping.yaml --hiera-config hiera.yaml --variables '{ "environment::description": "override description" }' -o -
 ```
 
 ## References
