@@ -33,8 +33,8 @@ module ErbHiera
 
       output = STDOUT if output == "-"
 
-      # if input is a file/stdin then out_file should be a file/stdout
-      if input =~ /.erb$/ || input == STDIN
+      # if input is a file then out_file should be a file too
+      if input =~ /.erb$/
         generate(output, input)
         next
       end
