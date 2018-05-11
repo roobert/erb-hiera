@@ -27,7 +27,7 @@ Options:
   --dry-run                   don't write out files
                                
   --verbose                   print compiled templates
-  --debug                     print backtrace on error
+  --debug                     enable hiera logging and print backtrace on error
                                
 ```
 

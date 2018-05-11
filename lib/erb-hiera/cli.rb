@@ -16,7 +16,7 @@ module ErbHiera
         opt :dry_run,        "don't write out files\n "
 
         opt :verbose,        "print compiled templates"
-        opt :debug,          "print backtrace on error\n "
+        opt :debug,          "enable hiera logging and print backtrace on error\n "
       end
 
       options = Trollop.with_standard_exception_handling(option_parser) do
