@@ -26,11 +26,6 @@ module ErbHiera
         option_parser.parse ARGV
       end
 
-      # validate cli args
-      #if (options[:config] && options[:template]) || ( ! options[:config] && ! options[:template])
-      #  raise ArgumentError, "either config or template must be defined but not both"
-      #end
-
       if options[:config_given]
         raise ArgumentError, "config file not readable"  unless File.readable?(options[:config])
       end
