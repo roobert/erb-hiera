@@ -20,6 +20,7 @@ module ErbHiera
 
   def self.run
     @options = CLI.parse
+    header unless mappings.empty?
     mappings.each do |mapping|
       ErbHiera.scope  = scope_from_cli   || mapping["scope"]
       input           = options[:input]  || mapping["dir"]["input"]
@@ -50,6 +51,12 @@ module ErbHiera
   end
 
   private
+
+  def self.header
+    puts "#"
+    puts "# erb-hiera"
+    puts "#"
+  end
 
   def self.scope_from_cli
     JSON.load(options[:scope]) if options[:scope]

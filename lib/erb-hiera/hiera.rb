@@ -28,7 +28,7 @@ module ErbHiera
         exit 1
       end
 
-      puts "# #{key}: #{value}" if ErbHiera.options[:verbose]
+      puts "# query/result: '#{key}' / '#{value}'" if ErbHiera.options[:verbose]
       value
     end
 
