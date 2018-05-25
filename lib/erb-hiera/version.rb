@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
 module ErbHiera
-  VERSION = "0.5.0-rc0"
+  VERSION = "0.5.0-rc1"
 end
