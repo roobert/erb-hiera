@@ -20,8 +20,8 @@ module ErbHiera
       end
     end
 
-    def self.hiera(key, type: :priority)
-      value = erb_hiera.lookup(key, nil, ErbHiera.scope, nil, type)
+    def self.hiera(key, type: :priority, default: default)
+      value = erb_hiera.lookup(key, nil, ErbHiera.scope, default, type)
 
       unless value
         puts "\nerror: cannot find value for key: #{key}"
