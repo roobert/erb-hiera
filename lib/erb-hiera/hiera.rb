@@ -21,7 +21,7 @@ module ErbHiera
     end
 
     def self.hiera(key, type: :priority, default: nil)
-      value = erb_hiera.lookup(key, nil, ErbHiera.scope, default, type)
+      value = erb_hiera.lookup(key, default, ErbHiera.scope, nil, type)
 
       unless value
         puts "\nerror: cannot find value for key: #{key}"
