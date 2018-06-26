@@ -20,7 +20,7 @@ module ErbHiera
       end
     end
 
-    def self.hiera(key, type: :priority, default: default)
+    def self.hiera(key, type: :priority, default: nil)
       value = erb_hiera.lookup(key, nil, ErbHiera.scope, default, type)
 
       unless value
