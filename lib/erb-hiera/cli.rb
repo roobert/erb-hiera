@@ -1,9 +1,9 @@
-require "trollop"
+require "optimist"
 
 module ErbHiera
   module CLI
     def self.parse
-      option_parser = Trollop::Parser.new do
+      option_parser = Optimist::Parser.new do
         opt :config,       "specify config file", :type => :string
         opt :hiera_config, "specify hiera config file", :type => :string
         opt :verbose,      "print compiled templates"
@@ -11,9 +11,9 @@ module ErbHiera
         opt :dry_run,      "don't write out files"
       end
 
-      options = Trollop.with_standard_exception_handling(option_parser) do
+      options = Optimist::with_standard_exception_handling(option_parser) do
         # show help if no cli args are provided
-        raise Trollop::HelpNeeded if ARGV.empty?
+        raise Optimist::HelpNeeded if ARGV.empty?
 
         option_parser.parse ARGV
       end
