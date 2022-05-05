@@ -3,7 +3,7 @@ require "optimist"
 module ErbHiera
   module CLI
     def self.parse
-      p = Optimist::Parser.new do
+      option_parser = Optimist::Parser.new do
         opt :config,       "specify config file", :type => :string
         opt :hiera_config, "specify hiera config file", :type => :string
         opt :verbose,      "print compiled templates"
